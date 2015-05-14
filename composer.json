@@ -1,0 +1,18 @@
+{
+  "name": "aastakhov/trycatch-task",
+  "type": "project",
+  "description": "Test task for TryCatch",
+  "authors": [
+    {
+      "name": "Andrey Astakhov",
+      "email": "andrey.astakhov@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+      "php": ">=5.4"
+  },
+  "require-dev": {
+      "phpunit/phpunit": "4.6.*"
+  }
+}
