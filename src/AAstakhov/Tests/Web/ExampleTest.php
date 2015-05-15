@@ -23,4 +23,22 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             [3, ['name' => 'Albert', 'phone' => '605458547', 'street' => 'Jan Pawła 67']]
         ];
     }
+
+    public function testGetUnexistingRecord()
+    {
+        $client = new GuzzleHttp\Client();
+
+        $response = $client->get('http://trycatch.local/example.php/address?id=1000');
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals(null, $response->json());
+    }
+
+    public function testNonIntegerParameter()
+    {
+        $client = new GuzzleHttp\Client();
+
+        $response = $client->get('http://trycatch.local/example.php/address?id=non-integer');
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals(null, $response->json());
+    }
 }
