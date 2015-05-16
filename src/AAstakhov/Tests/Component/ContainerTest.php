@@ -3,10 +3,11 @@
 namespace AAstakhov\Tests\Component;
 
 use AAstakhov\Component\Container;
+use AAstakhov\Component\Exceptions\ServiceNotFoundException;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAddService()
+    public function testGetService()
     {
         $container = new Container();
 
@@ -19,6 +20,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $service = $container->get('service2');
         $this->assertEquals('I am Service2. See who is here: I am Service1', $service->test());
+    }
+
+    /**
+     * @expectedException ServiceNotFoundException
+     */
+    public function testGetMissingService()
+    {
+        $container = new Container();
+        $container->get('service-that-does-not-exist');
     }
 }
 
