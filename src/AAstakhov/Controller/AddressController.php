@@ -5,6 +5,7 @@ namespace AAstakhov\Controller;
 use AAstakhov\DataStorage\CsvDataStorage;
 use AAstakhov\DataStorage\Exceptions\RecordNotFoundException;
 use AAstakhov\Interfaces\ContainerInterface;
+use AAstakhov\Interfaces\DataStorageInterface;
 
 /**
  * Controller for getting address data
@@ -25,13 +26,11 @@ class AddressController
     {
         $id = $requestParameters['id'];
 
-        $dataStorage = new CsvDataStorage();
-        $filePath = realpath(__DIR__.'/../../../web/example.csv');
+        /** @var DataStorageInterface $dataStorage */
+        $dataStorage = $this->container->get('data-storage');
 
         try {
-            $dataStorage->setDataSource(['file' => $filePath]);
             $address = $dataStorage->getRecord($id);
-
             return json_encode($address);
         } catch (RecordNotFoundException $exception) {
             return null;
