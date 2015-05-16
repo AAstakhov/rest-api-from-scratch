@@ -13,7 +13,11 @@ class ServiceNotFoundException extends Exception
      */
     private $serviceName;
 
-    public function __construct($message, $serviceName, Exception $previous = null)
+    /**
+     * @param string $serviceName
+     * @param Exception $previous
+     */
+    public function __construct($serviceName, Exception $previous = null)
     {
         $this->serviceName = $serviceName;
         parent::__construct(sprintf('Service %s is not registered in the container.', $serviceName), 0, $previous);
