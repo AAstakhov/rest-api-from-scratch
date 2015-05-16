@@ -13,7 +13,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->add('service1', function () {
             return new Service1();
         });
-        $container->add('service2', function ($container) {
+        $container->add('service2', function () use ($container) {
             return new Service2($container->get('service1'));
         });
 
