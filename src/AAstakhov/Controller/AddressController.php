@@ -12,7 +12,7 @@ use AAstakhov\Interfaces\ContainerInterface;
 class AddressController
 {
     /**
-     * @var
+     * @var ContainerInterface
      */
     private $container;
 
