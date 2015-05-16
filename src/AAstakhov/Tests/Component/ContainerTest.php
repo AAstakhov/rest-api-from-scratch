@@ -23,7 +23,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException ServiceNotFoundException
+     * @expectedException \AAstakhov\Component\Exceptions\ServiceNotFoundException
+     * @expectedExceptionMessage Service service-that-does-not-exist is not registered in the container.
      */
     public function testGetMissingService()
     {
