@@ -2,6 +2,7 @@
 
 namespace AAstakhov\Component;
 
+use AAstakhov\Interfaces\ContainerInterface;
 use AAstakhov\Interfaces\RouterInterface;
 
 class Router implements RouterInterface
@@ -10,11 +11,20 @@ class Router implements RouterInterface
      * @var array
      */
     private $routes = [];
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
-    public function addRoute($url, $controllerClassName, $actionName)
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    public function addRoute($url, $controllerServiceName, $actionName)
     {
         $this->routes[$url] = [
-            'controller' => $controllerClassName,
+            'controller' => $controllerServiceName,
             'action' => $actionName
         ];
     }
@@ -30,9 +40,9 @@ class Router implements RouterInterface
             return null;
         }
 
-        // Instantiate controller instance by class name
-        $controllerClassName = $this->routes[$url]['controller'];
-        $controller = new $controllerClassName;
+        // Get controller instance from the container
+        $controllerServiceName = $this->routes[$url]['controller'];
+        $controller = $this->container->get($controllerServiceName);
 
         // Execute a method of the controller with the suffix 'Action'
         $methodName = $this->routes[$url]['action'] . 'Action';

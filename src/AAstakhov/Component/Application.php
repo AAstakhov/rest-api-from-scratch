@@ -2,6 +2,7 @@
 
 namespace AAstakhov\Component;
 
+use AAstakhov\Controller\AddressController;
 use AAstakhov\Interfaces\ApplicationInterface;
 
 class Application implements ApplicationInterface
@@ -14,14 +15,22 @@ class Application implements ApplicationInterface
             return $this->container;
         }
 
-        $this->container = new Container();
-        $this->container->add('router', function () {
-            $router = new Router();
-            $router->addRoute('/address', 'AAstakhov\Controller\AddressController', 'getAddress');
+        $container = new Container();
+
+        // Register Address controller
+        $container->add('controller.address', function () use ($container) {
+            return new AddressController($container);
+        });
+
+        // Register Router
+        $container->add('router', function () use ($container) {
+            $router = new Router($container);
+            $router->addRoute('/address', 'controller.address', 'getAddress');
 
             return $router;
         });
 
+        $this->container = $container;
         return $this->container;
     }
 }

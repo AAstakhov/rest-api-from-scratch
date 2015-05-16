@@ -11,11 +11,11 @@ interface RouterInterface
      * Adds new route
      *
      * @param string $url
-     * @param string $controllerClassName
+     * @param string $controllerServiceName
      * @param string $actionName
      * @return void
      */
-    public function addRoute($url, $controllerClassName, $actionName);
+    public function addRoute($url, $controllerServiceName, $actionName);
 
     /**
      * Gets route count

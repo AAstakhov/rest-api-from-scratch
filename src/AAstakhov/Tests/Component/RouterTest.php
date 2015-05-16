@@ -8,15 +8,23 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddRoute()
     {
-        $router = new Router();
-        $router->addRoute('/test_url', 'AAstakhov\Tests\Component\TestController', 'test');
+        $container = $this->getMock('AAstakhov\Interfaces\ContainerInterface');
+
+        $router = new Router($container);
+        $router->addRoute('/test_url', 'controller.test', 'test');
         $this->assertEquals(1, $router->getRouteCount());
     }
 
     public function testExecute()
     {
-        $router = new Router();
-        $router->addRoute('/test_url', 'AAstakhov\Tests\Component\TestController', 'test');
+        $container = $this->getMock('AAstakhov\Interfaces\ContainerInterface');
+        $container
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(new TestController());
+
+        $router = new Router($container);
+        $router->addRoute('/test_url', 'controller.test', 'test');
 
         $response = $router->execute('/test_url', ['id' => 10]);
 
