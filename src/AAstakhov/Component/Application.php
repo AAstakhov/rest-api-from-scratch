@@ -10,7 +10,10 @@ class Application implements ApplicationInterface
     {
         $container = new Container();
         $container->add('router', function () {
-            return new Router();
+            $router = new Router();
+            $router->addRoute('/address', 'AAstakhov\Controller\AddressController', 'getAddress');
+
+            return $router;
         });
 
         return $container;
