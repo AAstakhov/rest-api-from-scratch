@@ -2,35 +2,28 @@
 
 namespace AAstakhov\Controller;
 
+use AAstakhov\DataStorage\CsvDataStorage;
+use AAstakhov\DataStorage\Exceptions\RecordNotFoundException;
+
 /**
  * Controller for getting address data
  */
 class AddressController
 {
-    /**
-     * @var array
-     */
-    private $addresses = [];
-
     public function getAddressAction($requestParameters)
     {
-        $this->fetchAddressesFromFile();
         $id = $requestParameters['id'];
-        $address = $this->addresses[$id];
-        return json_encode($address);
-    }
 
-    private function fetchAddressesFromFile()
-    {
-        $file = fopen('example.csv', 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
-            $this->addresses[] = [
-                'name' => $line[0],
-                'phone' => $line[1],
-                'street' => $line[2]
-            ];
+        $dataStorage = new CsvDataStorage();
+        $filePath = realpath(__DIR__.'/../../../web/example.csv');
+
+        try {
+            $dataStorage->setDataSource(['file' => $filePath]);
+            $address = $dataStorage->getRecord($id);
+
+            return json_encode($address);
+        } catch (RecordNotFoundException $exception) {
+            return null;
         }
-
-        fclose($file);
     }
 }
