@@ -2,10 +2,15 @@
 
 require_once('../src/autoload.php');
 
-use AAstakhov\Component\Router;
+use AAstakhov\Component\Application;
+use AAstakhov\Interfaces\RouterInterface;
 
-$router = new Router();
-$router->addRoute('/address', 'AAstakhov\Controller\AddressController', 'getAddress');
+$app = new Application();
+
+/**
+ * @var RouterInterface
+ */
+$router = $app->getContainer()->get('router');
 
 $path = $_SERVER['PATH_INFO'];
 print $router->execute($path, $_GET);
