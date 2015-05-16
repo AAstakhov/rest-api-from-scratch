@@ -3,8 +3,8 @@
 namespace AAstakhov\DataStorage;
 
 use AAstakhov\DataStorage\Exceptions\DataSourceException;
+use AAstakhov\DataStorage\Exceptions\RecordNotFoundException;
 use AAstakhov\Interfaces\DataStorageInterface;
-use AAstakhov\Interfaces\RecordNotFoundException;
 
 class CsvDataStorage implements DataStorageInterface
 {
@@ -12,7 +12,32 @@ class CsvDataStorage implements DataStorageInterface
 
     public function getRecord($id)
     {
-        // TODO: Implement getRecord() method.
+        $records = $this->fetchAddressesFromFile($this->filePath);
+        if (!isset($records[$id])) {
+            throw new RecordNotFoundException(sprintf('Record %d not found in the data storage', $id));
+        }
+
+        $result = $records[$id];
+
+        return $result;
+    }
+
+    private function fetchAddressesFromFile($filePath)
+    {
+        $records = [];
+
+        $file = fopen($filePath, 'r');
+        while (($line = fgetcsv($file)) !== false) {
+            $records[] = [
+                'name' => $line[0],
+                'phone' => $line[1],
+                'street' => $line[2]
+            ];
+        }
+
+        fclose($file);
+
+        return $records;
     }
 
     public function setDataSource(array $parameters)
