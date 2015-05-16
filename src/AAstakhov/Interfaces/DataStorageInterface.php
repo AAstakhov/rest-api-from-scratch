@@ -15,4 +15,12 @@ interface DataStorageInterface
      * @throws RecordNotFoundException
      */
     public function getRecord($id);
+
+    /**
+     * Sets data storage source
+     *
+     * @param array $parameters
+     * @return void
+     */
+    public function setDataSource(array $parameters);
 }
