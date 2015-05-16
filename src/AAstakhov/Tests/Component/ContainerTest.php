@@ -3,7 +3,6 @@
 namespace AAstakhov\Tests\Component;
 
 use AAstakhov\Component\Container;
-use AAstakhov\Component\Exceptions\ServiceNotFoundException;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
