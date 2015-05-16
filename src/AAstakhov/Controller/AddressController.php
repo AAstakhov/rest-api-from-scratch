@@ -7,17 +7,20 @@ namespace AAstakhov\Controller;
  */
 class AddressController
 {
+    /**
+     * @var array
+     */
     private $addresses = [];
 
-    function getAddressAction($requestParameters)
+    public function getAddressAction($requestParameters)
     {
-        $this->rcd();
+        $this->fetchAddressesFromFile();
         $id = $requestParameters['id'];
         $address = $this->addresses[$id];
         return json_encode($address);
     }
 
-    function rcd()
+    private function fetchAddressesFromFile()
     {
         $file = fopen('example.csv', 'r');
         while (($line = fgetcsv($file)) !== FALSE) {
