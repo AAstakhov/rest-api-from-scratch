@@ -4,6 +4,7 @@ namespace AAstakhov\Component;
 
 use AAstakhov\Controller\AddressController;
 use AAstakhov\Interfaces\ApplicationInterface;
+use AAstakhov\Interfaces\ContainerInterface;
 
 class Application implements ApplicationInterface
 {
@@ -15,6 +16,16 @@ class Application implements ApplicationInterface
             return $this->container;
         }
 
+        $this->container = $this->buildContainer();;
+
+        return $this->container;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    protected function buildContainer()
+    {
         $container = new Container();
 
         // Register Address controller
@@ -30,7 +41,6 @@ class Application implements ApplicationInterface
             return $router;
         });
 
-        $this->container = $container;
-        return $this->container;
+        return $container;
     }
 }
