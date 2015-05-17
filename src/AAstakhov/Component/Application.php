@@ -46,7 +46,9 @@ class Application implements ApplicationInterface
 
         // Register Address controller
         $container->add('controller.address', function () use ($container) {
-            return new AddressController($container);
+            $controller = new AddressController($container);
+
+            return $controller->setResponse(new HttpResponse());
         });
 
         // Register Router

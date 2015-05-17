@@ -35,10 +35,13 @@ abstract class BaseController
 
     /**
      * @param HttpResponseInterface $response
+     * @return $this
      */
     public function setResponse($response)
     {
         $this->response = $response;
+
+        return $this;
     }
 
     /**

@@ -22,6 +22,8 @@ class HttpResponse implements HttpResponseInterface
     public function setBody($text)
     {
         $this->body = $text;
+
+        return $this;
     }
 
     public function setStatusCode($code)
@@ -37,6 +39,8 @@ class HttpResponse implements HttpResponseInterface
                 $this->status = [500, 'Internal Server Error'];
                 break;
         };
+
+        return $this;
     }
 
     public function send()

@@ -24,21 +24,25 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @expectedException \GuzzleHttp\Exception\ClientException
+     * @expectedExceptionCode 404
+     */
     public function testGetMissingRecord()
     {
         $client = new GuzzleHttp\Client();
 
         $response = $client->get('http://trycatch.local/example.php/address?id=1000');
-        $this->assertEquals('200', $response->getStatusCode());
-        $this->assertEquals(null, $response->json());
     }
 
+    /**
+     * @expectedException \GuzzleHttp\Exception\ClientException
+     * @expectedExceptionCode 404
+     */
     public function testNonIntegerParameter()
     {
         $client = new GuzzleHttp\Client();
 
         $response = $client->get('http://trycatch.local/example.php/address?id=non-integer');
-        $this->assertEquals('200', $response->getStatusCode());
-        $this->assertEquals(null, $response->json());
     }
 }
