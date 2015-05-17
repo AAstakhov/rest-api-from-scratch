@@ -92,4 +92,23 @@ class AddressController extends BaseController
 
         return $this->getResponse();
     }
+
+    /**
+     * @param HttpRequestInterface $request
+     * @return HttpResponseInterface
+     */
+    public function deleteAddressAction(HttpRequestInterface $request)
+    {
+        $id = $request->getGetVariables()['id'];
+
+        /** @var DataStorageInterface $dataStorage */
+        $dataStorage = $this->getContainer()->get('data-storage');
+        try {
+            $dataStorage->deleteRecord($id);
+        } catch (Exception $exception) {
+            $this->processException($exception);
+        }
+
+        return $this->getResponse();
+    }
 }

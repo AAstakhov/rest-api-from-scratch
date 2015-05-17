@@ -2,6 +2,11 @@
 
 class ExampleTest extends PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->restoreFixture();
+    }
+
     /**
      * @dataProvider getExistingRecordsDataProvider
      */
@@ -48,8 +53,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRecord()
     {
-        $this->restoreFixture();
-
         $client = new GuzzleHttp\Client();
         $response = $client->post('http://trycatch.local/example.php/address',
             ['body' => ['Andrey', '0123456789', 'Puerto de la Cruz']]);
@@ -61,30 +64,18 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($lines));
     }
 
-    private function restoreFixture()
-    {
-        $distFile = realpath(__DIR__.'/../../../../web/example.csv.dist');
-        $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
-
-        copy($distFile, $fixtureFile);
-    }
-
     /**
      * @expectedException \GuzzleHttp\Exception\ClientException
      * @expectedExceptionCode 400
      */
     public function testCreateRecordWithWrongParameters()
     {
-        $this->restoreFixture();
-
         $client = new GuzzleHttp\Client();
         $client->post('http://trycatch.local/example.php/address', ['body' => ['Andrey']]);
     }
 
     public function testUpdateRecord()
     {
-        $this->restoreFixture();
-
         $client = new GuzzleHttp\Client();
 
         $response = $client->put('http://trycatch.local/example.php/address?id=1',
@@ -103,10 +94,38 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateRecordWithWrongParameters()
     {
-        $this->restoreFixture();
-
         $client = new GuzzleHttp\Client();
         $response = $client->put('http://trycatch.local/example.php/address?id=1',
             ['body' => ['Andrey']]);
+    }
+
+    public function testDeleteRecord()
+    {
+        $client = new GuzzleHttp\Client();
+        $response = $client->delete('http://trycatch.local/example.php/address?id=1');
+
+        $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
+        $lines = array_map('trim', file($fixtureFile));
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals(count($lines), 3);
+    }
+
+    /**
+     * @expectedException \GuzzleHttp\Exception\ClientException
+     * @expectedExceptionCode 404
+     */
+    public function testDeleteRecordWithWrongParameters()
+    {
+        $client = new GuzzleHttp\Client();
+        $client->delete('http://trycatch.local/example.php/address?id=100');
+    }
+
+    private function restoreFixture()
+    {
+        $distFile = realpath(__DIR__.'/../../../../web/example.csv.dist');
+        $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
+
+        copy($distFile, $fixtureFile);
     }
 }
