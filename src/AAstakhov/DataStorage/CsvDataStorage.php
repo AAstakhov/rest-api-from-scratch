@@ -9,11 +9,18 @@ use AAstakhov\Interfaces\DataStorageInterface;
 
 class CsvDataStorage implements DataStorageInterface
 {
+    /**
+     * @var string
+     */
     protected $filePath;
+    /**
+     * @var array
+     */
+    protected $header;
 
     public function getRecord($id)
     {
-        $records = $this->fetchAddressesFromFile($this->filePath);
+        $records = $this->fetchRecordsFromFile($this->filePath);
         if (!isset($records[$id])) {
             throw new RecordNotFoundException(sprintf('Record %d not found in the data storage', $id));
         }
@@ -23,17 +30,13 @@ class CsvDataStorage implements DataStorageInterface
         return $result;
     }
 
-    private function fetchAddressesFromFile($filePath)
+    private function fetchRecordsFromFile($filePath)
     {
         $records = [];
 
         $file = fopen($filePath, 'r');
         while (($line = fgetcsv($file)) !== false) {
-            $records[] = [
-                'name' => $line[0],
-                'phone' => $line[1],
-                'street' => $line[2]
-            ];
+            $records[] = array_combine($this->header, $line);
         }
 
         fclose($file);
@@ -46,8 +49,12 @@ class CsvDataStorage implements DataStorageInterface
         if (!isset($parameters['file'])) {
             throw new DataSourceException('File path is not defined for csv data storage.');
         }
+        if (!isset($parameters['header'])) {
+            throw new DataSourceException('Header array is not defined for csv data storage.');
+        }
 
         $this->filePath = $parameters['file'];
+        $this->header = $parameters['header'];
     }
 
     /**
@@ -75,9 +82,40 @@ class CsvDataStorage implements DataStorageInterface
      */
     private function validateRecord(array $record)
     {
-        // @todo: smarter validation is desired
-        if (count($record) != 3) {
-            throw new WrongRecordDataException('Record must have 3 items');
+        if (count($record) != count($this->header)) {
+            throw new WrongRecordDataException('Record must have as many elements as the header: '.count($this->header));
         }
+    }
+
+    public function updateRecord($id, array $record)
+    {
+        $this->validateRecord($record);
+
+        $records = $this->fetchRecordsFromFile($this->filePath);
+        $records[$id] = $record;
+
+        $this->saveRecordsToFile($records);
+    }
+
+    /**
+     * @param array $records
+     */
+    protected function saveRecordsToFile(array $records)
+    {
+        $file = fopen($this->filePath, 'w');
+
+        foreach ($records as $record) {
+            fputcsv($file, $record);
+        }
+
+        fclose($file);
+    }
+
+    public function deleteRecord($id)
+    {
+        $records = $this->fetchRecordsFromFile($this->filePath);
+        unset($records[$id]);
+
+        $this->saveRecordsToFile($records);
     }
 }

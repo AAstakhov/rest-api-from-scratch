@@ -25,6 +25,23 @@ interface DataStorageInterface
     public function addRecord(array $record);
 
     /**
+     * Updates a record with the given id
+     *
+     * @param $id
+     * @param array $record
+     * @return $this
+     */
+    public function updateRecord($id, array $record);
+
+    /**
+     * Deletes a record with the given id
+     *
+     * @param $id
+     * @return $this
+     */
+    public function deleteRecord($id);
+
+    /**
      * Sets data storage source
      *
      * @param array $parameters
