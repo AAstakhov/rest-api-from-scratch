@@ -2,6 +2,8 @@
 
 namespace AAstakhov\Tests\View;
 
+use AAstakhov\View\JsonView;
+
 class JsonViewTest extends \PHPUnit_Framework_TestCase
 {
     public function testRender()
