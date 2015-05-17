@@ -8,6 +8,7 @@ use AAstakhov\Interfaces\DataStorageInterface;
 use AAstakhov\Interfaces\HttpRequestInterface;
 use AAstakhov\Interfaces\HttpResponseInterface;
 use AAstakhov\Interfaces\ViewInterface;
+use Exception;
 
 /**
  * Controller for getting address data
@@ -33,18 +34,27 @@ class AddressController extends BaseController
 
             $this->getResponse()->setBody($responseText);
 
-        } catch (RecordNotFoundException $exception) {
-            $this->getResponse()
-                ->setStatusCode(404)
-                ->setBody($exception->getMessage());
-
-        } catch (\Exception $exception) {
-            $this->getResponse()
-                ->setStatusCode(500)
-                ->setBody($exception->getMessage());
+        } catch (Exception $exception) {
+            $this->processException($exception);
         }
 
         return $this->getResponse();
+    }
+
+    /**
+     * @param Exception $exception
+     */
+    private function processException(Exception $exception)
+    {
+        $statusCode = 500;
+        if ($exception instanceof RecordNotFoundException) {
+            $statusCode = 404;
+        } elseif ($exception instanceof WrongRecordDataException) {
+            $statusCode = 400;
+        }
+        $this->getResponse()
+            ->setStatusCode($statusCode)
+            ->setBody($exception->getMessage());
     }
 
     /**
@@ -57,15 +67,8 @@ class AddressController extends BaseController
         $dataStorage = $this->getContainer()->get('data-storage');
         try {
             $dataStorage->addRecord($request->getPostVariables());
-        } catch (WrongRecordDataException $exception) {
-            $this->getResponse()
-                ->setStatusCode(400)
-                ->setBody($exception->getMessage());
-
-        } catch (\Exception $exception) {
-            $this->getResponse()
-                ->setStatusCode(500)
-                ->setBody($exception->getMessage());
+        } catch (Exception $exception) {
+            $this->processException($exception);
         }
 
         return $this->getResponse();
