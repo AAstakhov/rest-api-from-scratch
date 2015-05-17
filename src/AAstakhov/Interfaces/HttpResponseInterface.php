@@ -7,6 +7,7 @@ interface HttpResponseInterface
      * Set response body
      *
      * @param string $text
+     * @return $this
      */
     public function setBody($text);
 
@@ -14,6 +15,7 @@ interface HttpResponseInterface
      * Set HTTP status code
      *
      * @param int $code
+     * @return $this
      */
     public function setStatusCode($code);
 
