@@ -54,7 +54,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $response = $client->post('http://trycatch.local/example.php/address',
             ['body' => ['Andrey', '0123456789', 'Puerto de la Cruz']]);
 
-
         $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
         $lines = file($fixtureFile);
 
@@ -70,6 +69,34 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         copy($distFile, $fixtureFile);
     }
 
+//    public function testUpdateRecord()
+//    {
+//        $this->restoreFixture();
+//
+//        $client = new GuzzleHttp\Client();
+//        $response = $client->put('http://trycatch.local/example.php/address?id=1',
+//            ['body' => ['Andrey', '0123456789', 'Puerto de la Cruz']]);
+//
+//        $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
+//        $lines = file($fixtureFile);
+//
+//        $this->assertEquals('200', $response->getStatusCode());
+//        $this->assertEquals($lines[1], 'Andrey,0123456789,Puerto de la Cruz');
+//    }
+//
+//    /**
+//     * @expectedException \GuzzleHttp\Exception\ClientException
+//     * @expectedExceptionCode 400
+//     */
+//    public function testUpdateRecordWithWrongParameters()
+//    {
+//        $this->restoreFixture();
+//
+//        $client = new GuzzleHttp\Client();
+//        $response = $client->put('http://trycatch.local/example.php/address?id=1',
+//            ['body' => ['Andrey']]);
+//    }
+
     /**
      * @expectedException \GuzzleHttp\Exception\ClientException
      * @expectedExceptionCode 400
@@ -81,6 +108,4 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $client = new GuzzleHttp\Client();
         $client->post('http://trycatch.local/example.php/address', ['body' => ['Andrey']]);
     }
-
-
 }
