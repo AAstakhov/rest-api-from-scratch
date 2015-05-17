@@ -34,7 +34,11 @@ class Application implements ApplicationInterface
         $container->add('data-storage', function () {
             $dataStorage = new CsvDataStorage();
             $filePath = realpath(__DIR__.'/../../../web/example.csv');
-            $dataStorage->setDataSource(['file' => $filePath]);
+            $dataStorage->setDataSource(
+                [
+                    'file' => $filePath,
+                    'header' => ['name', 'phone', 'street']
+                ]);
 
             return $dataStorage;
         });
