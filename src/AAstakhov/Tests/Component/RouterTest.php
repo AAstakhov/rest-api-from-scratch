@@ -2,7 +2,9 @@
 
 namespace AAstakhov\Tests\Component;
 
+use AAstakhov\Component\HttpRequest;
 use AAstakhov\Component\Router;
+use AAstakhov\Interfaces\HttpRequestInterface;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +28,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $router = new Router($container);
         $router->addRoute('/test_url', 'GET', 'controller.test', 'test');
 
-        $response = $router->execute('/test_url', 'GET', ['id' => 10]);
+        $request = new HttpRequest('/test_url', 'GET', ['id' => 10], []);
+        $response = $router->execute($request);
 
         $this->assertEquals('Response is 10', $response);
     }
@@ -36,8 +39,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
 class TestController
 {
-    public function testAction($parameters)
+    public function testAction(HttpRequestInterface $request)
     {
+        $parameters = $request->getGetVariables();
         return 'Response is ' . $parameters['id'];
     }
 }

@@ -26,12 +26,10 @@ interface RouterInterface
     public function getRouteCount();
 
     /**
-     * Executes controller action for the given url
+     * Executes controller action for the given request
      *
-     * @param string $url
-     * @param string $method
-     * @param array $parameters
-     * @return mixed
+     * @param HttpRequestInterface $request
+     * @return HttpResponseInterface
      */
-    public function execute($url, $method, array $parameters);
+    public function execute(HttpRequestInterface $request);
 }

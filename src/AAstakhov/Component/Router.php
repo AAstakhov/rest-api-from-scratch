@@ -3,6 +3,7 @@
 namespace AAstakhov\Component;
 
 use AAstakhov\Interfaces\ContainerInterface;
+use AAstakhov\Interfaces\HttpRequestInterface;
 use AAstakhov\Interfaces\RouterInterface;
 
 class Router implements RouterInterface
@@ -36,13 +37,15 @@ class Router implements RouterInterface
         return count($this->routes);
     }
 
-    public function execute($url, $method, array $parameters)
+    public function execute(HttpRequestInterface $request)
     {
-        if (!isset($this->routes[$url.$method])) {
+        $routeKey = $request->getPathInfo().$request->getMethod();
+
+        if (!isset($this->routes[$routeKey])) {
             return null;
         }
 
-        $route = $this->routes[$url.$method];
+        $route = $this->routes[$routeKey];
 
         // Get controller instance from the container
         $controllerServiceName = $route['controller'];
@@ -50,7 +53,7 @@ class Router implements RouterInterface
 
         // Execute a method of the controller with the suffix 'Action'
         $methodName = $route['action'].'Action';
-        $result = $controller->$methodName($parameters);
+        $result = $controller->$methodName($request);
 
         return $result;
     }
