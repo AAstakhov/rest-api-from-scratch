@@ -12,6 +12,17 @@ interface HttpRequestInterface
     public function getPathInfo();
 
     /**
+     * Gets request method
+     *  - GET
+     *  - POST
+     *  - PUT
+     *  - DELETE
+     *
+     * @return string
+     */
+    public function getMethod();
+
+    /**
      * Gets GET variables
      *
      * @return array
