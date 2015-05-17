@@ -18,4 +18,13 @@ class JsonViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    /**
+     * @expectedException \AAstakhov\View\Exceptions\ViewException
+     */
+    public function testRenderWithWrongParameters()
+    {
+        $jsonView = new JsonView();
+        $result = $jsonView->render([]);
+    }
 }
