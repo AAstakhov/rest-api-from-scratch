@@ -16,6 +16,17 @@ class CsvDataStorageTest extends \PHPUnit_Framework_TestCase
      */
     private $fixturePath;
 
+    protected function setUp()
+    {
+        $this->fixturePath = __DIR__.'/fixtures/example.csv';
+        $this->restoreFixture();
+        $this->csv = new CsvDataStorage();
+        $this->csv->setDataSource([
+            'file' => $this->fixturePath,
+            'header' => [0, 1]
+        ]);
+    }
+
     public function testGetRecord()
     {
         $record = $this->csv->getRecord(1);
@@ -48,18 +59,6 @@ class CsvDataStorageTest extends \PHPUnit_Framework_TestCase
 
         $expected = ['a,b', 'e,f'];
         $this->assertEquals($expected, $lines);
-    }
-
-    protected function setUp()
-    {
-        $this->fixturePath = __DIR__.'/fixtures/example.csv';
-        $this->restoreFixture();
-        $this->csv = new CsvDataStorage();
-        $this->csv->setDataSource([
-            'file' => $this->fixturePath,
-            'header' => [0, 1]
-        ]);
-
     }
 
     private function restoreFixture()
