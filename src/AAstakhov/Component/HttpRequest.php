@@ -23,7 +23,6 @@ class HttpRequest implements HttpRequestInterface
      */
     private $postVariables;
 
-
     /**
      * @param string $pathInfo
      * @param string $method
@@ -47,7 +46,6 @@ class HttpRequest implements HttpRequestInterface
     {
         return $this->method;
     }
-
 
     public function getGetVariables()
     {
