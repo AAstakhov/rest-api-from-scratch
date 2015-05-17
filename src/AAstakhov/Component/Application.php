@@ -6,6 +6,7 @@ use AAstakhov\Controller\AddressController;
 use AAstakhov\DataStorage\CsvDataStorage;
 use AAstakhov\Interfaces\ApplicationInterface;
 use AAstakhov\Interfaces\ContainerInterface;
+use AAstakhov\View\JsonView;
 
 class Application implements ApplicationInterface
 {
@@ -36,6 +37,11 @@ class Application implements ApplicationInterface
             $dataStorage->setDataSource(['file' => $filePath]);
 
             return $dataStorage;
+        });
+
+        // Register json view
+        $container->add('view', function () use ($container) {
+            return new JsonView();
         });
 
         // Register Address controller
