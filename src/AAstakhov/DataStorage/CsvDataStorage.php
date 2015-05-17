@@ -114,6 +114,11 @@ class CsvDataStorage implements DataStorageInterface
     public function deleteRecord($id)
     {
         $records = $this->fetchRecordsFromFile($this->filePath);
+
+        if (!isset($records[$id])) {
+            throw new RecordNotFoundException(sprintf('Record %d not found in the data storage', $id));
+        }
+
         unset($records[$id]);
 
         $this->saveRecordsToFile($records);
