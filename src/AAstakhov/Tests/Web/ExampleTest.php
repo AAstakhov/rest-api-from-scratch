@@ -45,4 +45,38 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $response = $client->get('http://trycatch.local/example.php/address?id=non-integer');
     }
+
+    public function testCreateRecord()
+    {
+        $this->restoreFixture();
+
+        $client = new GuzzleHttp\Client();
+        $response = $client->post('http://trycatch.local/example.php/address',
+            ['Andrey', '0123456789', 'Puerto de la Cruz']);
+
+        $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
+        $lines = file_get_contents($fixtureFile);
+
+        $this->assertEquals(5, count($lines));
+    }
+
+    private function restoreFixture()
+    {
+        $distFile = realpath(__DIR__.'/../../../../web/example.csv.dist');
+        $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
+
+        copy($distFile, $fixtureFile);
+    }
+
+    /**
+     * @expectedException \GuzzleHttp\Exception\ClientException
+     * @expectedExceptionCode 400
+     */
+    public function testCreateRecordWithWrongParameters()
+    {
+        $this->restoreFixture();
+
+        $client = new GuzzleHttp\Client();
+        $client->post('http://trycatch.local/example.php/address', ['Andrey']);
+    }
 }
