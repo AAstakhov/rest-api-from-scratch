@@ -11,7 +11,12 @@ $app = new Application();
 /** @var RouterInterface $router */
 $router = $app->getContainer()->get('router');
 
-$request = new \AAstakhov\Component\HttpRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD'], $_GET, $_POST);
+$postVariables = $_POST;
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    parse_str(file_get_contents("php://input"), $postVariables);
+}
+$request = new \AAstakhov\Component\HttpRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD'], $_GET,
+    $postVariables);
 
 /** @var HttpResponseInterface $response */
 $response = $router->execute($request);

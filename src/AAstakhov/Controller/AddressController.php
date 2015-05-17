@@ -73,4 +73,23 @@ class AddressController extends BaseController
 
         return $this->getResponse();
     }
+
+    /**
+     * @param HttpRequestInterface $request
+     * @return HttpResponseInterface
+     */
+    public function updateAddressAction(HttpRequestInterface $request)
+    {
+        $id = $request->getGetVariables()['id'];
+
+        /** @var DataStorageInterface $dataStorage */
+        $dataStorage = $this->getContainer()->get('data-storage');
+        try {
+            $dataStorage->updateRecord($id, $request->getPostVariables());
+        } catch (Exception $exception) {
+            $this->processException($exception);
+        }
+
+        return $this->getResponse();
+    }
 }
