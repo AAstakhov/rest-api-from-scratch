@@ -39,7 +39,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      * @expectedException \GuzzleHttp\Exception\ClientException
      * @expectedExceptionCode 404
      */
-    public function testNonIntegerParameter()
+    public function testGetRecordWithNonIntegerParameter()
     {
         $client = new GuzzleHttp\Client();
 
