@@ -1,10 +1,19 @@
 <?php
 
+use GuzzleHttp\ClientInterface;
+
 class ExampleTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var ClientInterface
+     */
+    private $client;
+
     protected function setUp()
     {
         $this->restoreFixture();
+        $this->client = new GuzzleHttp\Client();
     }
 
     /**
@@ -12,9 +21,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetExistingRecords($id, array $record)
     {
-        $client = new GuzzleHttp\Client();
-
-        $response = $client->get('http://trycatch.local/example.php/address?id='.$id);
+        $response = $this->client->get('http://trycatch.local/example.php/address?id='.$id);
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals($record, $response->json());
     }
@@ -35,9 +42,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMissingRecord()
     {
-        $client = new GuzzleHttp\Client();
-
-        $response = $client->get('http://trycatch.local/example.php/address?id=1000');
+        $this->client->get('http://trycatch.local/example.php/address?id=1000');
     }
 
     /**
@@ -46,15 +51,12 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRecordWithNonIntegerParameter()
     {
-        $client = new GuzzleHttp\Client();
-
-        $response = $client->get('http://trycatch.local/example.php/address?id=non-integer');
+        $this->client->get('http://trycatch.local/example.php/address?id=non-integer');
     }
 
     public function testCreateRecord()
     {
-        $client = new GuzzleHttp\Client();
-        $response = $client->post('http://trycatch.local/example.php/address',
+        $response = $this->client->post('http://trycatch.local/example.php/address',
             ['body' => ['Andrey', '0123456789', 'Puerto de la Cruz']]);
 
         $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
@@ -70,15 +72,12 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateRecordWithWrongParameters()
     {
-        $client = new GuzzleHttp\Client();
-        $client->post('http://trycatch.local/example.php/address', ['body' => ['Andrey']]);
+        $this->client->post('http://trycatch.local/example.php/address', ['body' => ['Andrey']]);
     }
 
     public function testUpdateRecord()
     {
-        $client = new GuzzleHttp\Client();
-
-        $response = $client->put('http://trycatch.local/example.php/address?id=1',
+        $response = $this->client->put('http://trycatch.local/example.php/address?id=1',
             ['body' => ['Andrey', '0123456789', 'Puerto de la Cruz']]);
 
         $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
@@ -94,15 +93,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateRecordWithWrongParameters()
     {
-        $client = new GuzzleHttp\Client();
-        $response = $client->put('http://trycatch.local/example.php/address?id=1',
+        $this->client->put('http://trycatch.local/example.php/address?id=1',
             ['body' => ['Andrey']]);
     }
 
     public function testDeleteRecord()
     {
-        $client = new GuzzleHttp\Client();
-        $response = $client->delete('http://trycatch.local/example.php/address?id=1');
+        $response = $this->client->delete('http://trycatch.local/example.php/address?id=1');
 
         $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
         $lines = array_map('trim', file($fixtureFile));
@@ -117,8 +114,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteRecordWithWrongParameters()
     {
-        $client = new GuzzleHttp\Client();
-        $client->delete('http://trycatch.local/example.php/address?id=100');
+        $this->client->delete('http://trycatch.local/example.php/address?id=100');
     }
 
     private function restoreFixture()
