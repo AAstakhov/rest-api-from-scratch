@@ -4,6 +4,7 @@ namespace AAstakhov\DataStorage;
 
 use AAstakhov\DataStorage\Exceptions\DataSourceException;
 use AAstakhov\DataStorage\Exceptions\RecordNotFoundException;
+use AAstakhov\DataStorage\Exceptions\WrongRecordDataException;
 use AAstakhov\Interfaces\DataStorageInterface;
 
 class CsvDataStorage implements DataStorageInterface
@@ -47,5 +48,36 @@ class CsvDataStorage implements DataStorageInterface
         }
 
         $this->filePath = $parameters['file'];
+    }
+
+    /**
+     * Adds new record
+     *
+     * @param array $record
+     * @return $this
+     */
+    public function addRecord(array $record)
+    {
+        $this->validateRecord($record);
+
+        $file = fopen($this->filePath, 'a');
+        $result = fputcsv($file, $record);
+        fclose($file);
+
+        if ($result === false) {
+            // @todo: process failed attempt to write
+        }
+    }
+
+    /**
+     * @param array $record
+     * @throws WrongRecordDataException
+     */
+    private function validateRecord(array $record)
+    {
+        // @todo: smarter validation is desired
+        if (count($record) != 3) {
+            throw new WrongRecordDataException('Record must have 3 items');
+        }
     }
 }

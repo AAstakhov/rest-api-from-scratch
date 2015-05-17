@@ -17,6 +17,14 @@ interface DataStorageInterface
     public function getRecord($id);
 
     /**
+     * Adds new record
+     *
+     * @param array $record
+     * @return $this
+     */
+    public function addRecord(array $record);
+
+    /**
      * Sets data storage source
      *
      * @param array $parameters
