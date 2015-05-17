@@ -54,7 +54,9 @@ class Application implements ApplicationInterface
         // Register Router
         $container->add('router', function () use ($container) {
             $router = new Router($container);
-            $router->addRoute('/address', 'controller.address', 'getAddress');
+            $router
+                ->addRoute('/address', 'GET', 'controller.address', 'getAddress')
+                ->addRoute('/address', 'POST', 'controller.address', 'createAddress');
 
             return $router;
         });

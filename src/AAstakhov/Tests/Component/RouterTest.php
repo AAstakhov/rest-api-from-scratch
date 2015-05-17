@@ -11,7 +11,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $container = $this->getMock('AAstakhov\Interfaces\ContainerInterface');
 
         $router = new Router($container);
-        $router->addRoute('/test_url', 'controller.test', 'test');
+        $router->addRoute('/test_url', 'GET', 'controller.test', 'test');
         $this->assertEquals(1, $router->getRouteCount());
     }
 
@@ -24,9 +24,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new TestController());
 
         $router = new Router($container);
-        $router->addRoute('/test_url', 'controller.test', 'test');
+        $router->addRoute('/test_url', 'GET', 'controller.test', 'test');
 
-        $response = $router->execute('/test_url', ['id' => 10]);
+        $response = $router->execute('/test_url', 'GET', ['id' => 10]);
 
         $this->assertEquals('Response is 10', $response);
     }

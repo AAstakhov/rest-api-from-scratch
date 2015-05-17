@@ -3,6 +3,7 @@
 namespace AAstakhov\Controller;
 
 use AAstakhov\DataStorage\Exceptions\RecordNotFoundException;
+use AAstakhov\DataStorage\Exceptions\WrongRecordDataException;
 use AAstakhov\Interfaces\DataStorageInterface;
 use AAstakhov\Interfaces\HttpResponseInterface;
 use AAstakhov\Interfaces\ViewInterface;
@@ -34,6 +35,26 @@ class AddressController extends BaseController
         } catch (RecordNotFoundException $exception) {
             $this->getResponse()
                 ->setStatusCode(404)
+                ->setBody($exception->getMessage());
+
+        } catch (\Exception $exception) {
+            $this->getResponse()
+                ->setStatusCode(500)
+                ->setBody($exception->getMessage());
+        }
+
+        return $this->getResponse();
+    }
+
+    public function createAddressAction(array $requestParameters)
+    {
+        /** @var DataStorageInterface $dataStorage */
+        $dataStorage = $this->getContainer()->get('data-storage');
+        try {
+            $dataStorage->addRecord($requestParameters);
+        } catch (WrongRecordDataException $exception) {
+            $this->getResponse()
+                ->setStatusCode(400)
                 ->setBody($exception->getMessage());
 
         } catch (\Exception $exception) {

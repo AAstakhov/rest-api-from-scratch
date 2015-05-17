@@ -9,7 +9,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $client = new GuzzleHttp\Client();
 
-        $response = $client->get('http://trycatch.local/example.php/address?id=' . $id);
+        $response = $client->get('http://trycatch.local/example.php/address?id='.$id);
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals($record, $response->json());
     }
@@ -52,11 +52,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $client = new GuzzleHttp\Client();
         $response = $client->post('http://trycatch.local/example.php/address',
-            ['Andrey', '0123456789', 'Puerto de la Cruz']);
+            ['body' => ['Andrey', '0123456789', 'Puerto de la Cruz']]);
+
 
         $fixtureFile = realpath(__DIR__.'/../../../../web/example.csv');
-        $lines = file_get_contents($fixtureFile);
+        $lines = file($fixtureFile);
 
+        $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals(5, count($lines));
     }
 
@@ -77,6 +79,8 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->restoreFixture();
 
         $client = new GuzzleHttp\Client();
-        $client->post('http://trycatch.local/example.php/address', ['Andrey']);
+        $client->post('http://trycatch.local/example.php/address', ['body' => ['Andrey']]);
     }
+
+
 }

@@ -21,12 +21,14 @@ class Router implements RouterInterface
         $this->container = $container;
     }
 
-    public function addRoute($url, $controllerServiceName, $actionName)
+    public function addRoute($url, $method, $controllerServiceName, $actionName)
     {
-        $this->routes[$url] = [
+        $this->routes[$url.$method] = [
             'controller' => $controllerServiceName,
             'action' => $actionName
         ];
+
+        return $this;
     }
 
     public function getRouteCount()
@@ -34,18 +36,20 @@ class Router implements RouterInterface
         return count($this->routes);
     }
 
-    public function execute($url, array $parameters)
+    public function execute($url, $method, array $parameters)
     {
-        if(!isset($this->routes[$url])) {
+        if (!isset($this->routes[$url.$method])) {
             return null;
         }
 
+        $route = $this->routes[$url.$method];
+
         // Get controller instance from the container
-        $controllerServiceName = $this->routes[$url]['controller'];
+        $controllerServiceName = $route['controller'];
         $controller = $this->container->get($controllerServiceName);
 
         // Execute a method of the controller with the suffix 'Action'
-        $methodName = $this->routes[$url]['action'] . 'Action';
+        $methodName = $route['action'].'Action';
         $result = $controller->$methodName($parameters);
 
         return $result;
