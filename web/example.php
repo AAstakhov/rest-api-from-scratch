@@ -10,13 +10,7 @@ $app = new Application();
 
 /** @var RouterInterface $router */
 $router = $app->getContainer()->get('router');
-
-$postVariables = $_POST;
-if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-    parse_str(file_get_contents("php://input"), $postVariables);
-}
-$request = new \AAstakhov\Component\HttpRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD'], $_GET,
-    $postVariables);
+$request = $app->createRequestFromGlobals();
 
 /** @var HttpResponseInterface $response */
 $response = $router->execute($request);
