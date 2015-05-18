@@ -18,6 +18,8 @@ Tests without functional tests (web tests to test api using guzzle http client)
 vendor/bin/phpunit --testsuite AllWithoutWeb
 ```
 
+Or just observe [how it works in Travis](https://travis-ci.org/AAstakhov/try-catch-test-task)
+
 
 ## Rest API 
 
@@ -39,7 +41,9 @@ id        | integer | Address ID
  
 ##### Responses
 
-404 | Address record with the a id is not found
+Code | Description
+---- | -----------
+404  | Address record with the a id is not found
 
 
 #### Method POST
@@ -53,7 +57,9 @@ Array with address data.
  
 ##### Responses
 
-400 | Wrong parameters: element count is less then header element count
+Code | Description
+---- | -----------
+400  | Wrong parameters: element count is less then header element count
 
 
 
@@ -86,7 +92,9 @@ id        | integer | Address ID
  
 ##### Responses
 
-404 | Address record with the a id is not found
+Code | Description
+---- | -----------
+404  | Address record with the a id is not found
 
 
 ## Technical implementation
@@ -98,13 +106,10 @@ Entry point is an instance of class Application.
 ### Components
 
 * Autoloader
-* Container
+* DI Container
 * Router
 * HttpRequest
 * HttpResponse
-
-Container - DI container.
-
 
 ### How to extend solution
 
@@ -121,9 +126,9 @@ class MysqlDataStorage implements DataStorageInterface
 Register new class in the DI container:
 
 ```php
-        $container->add('data-storage', function () {
-            return new MysqlDataStorage();
-        });
+$container->add('data-storage', function () {
+    return new MysqlDataStorage();
+});
 ```
 
 ### How to add new view (data presentation)
@@ -139,7 +144,7 @@ class XhtmlView implements ViewInterface
 Register new class in the DI container:
 
 ```php
-        $container->add('view', function () {
-            return new XhtmlView();
-        });
+$container->add('view', function () {
+    return new XhtmlView();
+});
 ```
