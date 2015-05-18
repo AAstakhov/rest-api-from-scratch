@@ -19,6 +19,9 @@ class HttpResponse implements HttpResponseInterface
      */
     private $status = [200, 'OK'];
 
+    /**
+     * @inheritdoc
+     */
     public function setBody($text)
     {
         $this->body = $text;
@@ -26,6 +29,9 @@ class HttpResponse implements HttpResponseInterface
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setStatusCode($code)
     {
         switch ($code) {
@@ -43,6 +49,9 @@ class HttpResponse implements HttpResponseInterface
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function send()
     {
         header(sprintf('HTTP/1.1 %d %s', $this->getStatusCode(), $this->getStatusMessage()));
@@ -51,11 +60,17 @@ class HttpResponse implements HttpResponseInterface
         print $this->body;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getStatusCode()
     {
         return $this->status[0];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getStatusMessage()
     {
         return $this->status[1];

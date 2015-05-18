@@ -7,6 +7,9 @@ use AAstakhov\View\Exceptions\ViewException;
 
 class JsonView implements ViewInterface
 {
+    /**
+     * @inheritdoc
+     */
     public function render(array $parameters)
     {
         if (!isset($parameters['record'])) {

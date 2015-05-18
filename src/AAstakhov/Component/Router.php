@@ -17,11 +17,17 @@ class Router implements RouterInterface
      */
     private $container;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function addRoute($url, $method, $controllerServiceName, $actionName)
     {
         $this->routes[$url.$method] = [
@@ -32,11 +38,17 @@ class Router implements RouterInterface
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getRouteCount()
     {
         return count($this->routes);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute(HttpRequestInterface $request)
     {
         $routeKey = $request->getPathInfo().$request->getMethod();

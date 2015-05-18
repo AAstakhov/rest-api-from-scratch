@@ -37,21 +37,33 @@ class HttpRequest implements HttpRequestInterface
         $this->postVariables = $postVariables;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getPathInfo()
     {
         return $this->pathInfo;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getMethod()
     {
         return $this->method;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getGetVariables()
     {
         return $this->getVariables;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getPostVariables()
     {
         return $this->postVariables;

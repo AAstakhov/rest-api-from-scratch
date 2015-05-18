@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AAstakhov\Component;
-
 
 use AAstakhov\Component\Exceptions\ServiceNotFoundException;
 use AAstakhov\Interfaces\ContainerInterface;
@@ -15,11 +13,17 @@ class Container implements ContainerInterface
      */
     protected $services = [];
 
+    /**
+     * @inheritdoc
+     */
     public function add($serviceName, Closure $service)
     {
         $this->services[$serviceName] = $service;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function get($serviceName)
     {
         if (!isset($this->services[$serviceName])) {

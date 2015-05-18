@@ -2,6 +2,8 @@
 
 namespace AAstakhov\Interfaces;
 
+use AAstakhov\DataStorage\Exceptions\RecordNotFoundException;
+
 /**
  * Interface for data storage
  */

@@ -2,12 +2,10 @@
 
 namespace AAstakhov\Component;
 
-use AAstakhov\Component\HttpRequest;
 use AAstakhov\Controller\AddressController;
 use AAstakhov\DataStorage\CsvDataStorage;
 use AAstakhov\Interfaces\ApplicationInterface;
 use AAstakhov\Interfaces\ContainerInterface;
-use AAstakhov\Interfaces\HttpRequestInterface;
 use AAstakhov\View\JsonView;
 
 class Application implements ApplicationInterface
@@ -63,7 +61,7 @@ class Application implements ApplicationInterface
         });
 
         // Register json view
-        $container->add('view', function () use ($container) {
+        $container->add('view', function () {
             return new JsonView();
         });
 

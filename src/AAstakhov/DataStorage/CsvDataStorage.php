@@ -18,6 +18,9 @@ class CsvDataStorage implements DataStorageInterface
      */
     protected $header;
 
+    /**
+     * @inheritdoc
+     */
     public function getRecord($id)
     {
         $records = $this->fetchRecordsFromFile($this->filePath);
@@ -30,38 +33,8 @@ class CsvDataStorage implements DataStorageInterface
         return $result;
     }
 
-    private function fetchRecordsFromFile($filePath)
-    {
-        $records = [];
-
-        $file = fopen($filePath, 'r');
-        while (($line = fgetcsv($file)) !== false) {
-            $records[] = array_combine($this->header, $line);
-        }
-
-        fclose($file);
-
-        return $records;
-    }
-
-    public function setDataSource(array $parameters)
-    {
-        if (!isset($parameters['file'])) {
-            throw new DataSourceException('File path is not defined for csv data storage.');
-        }
-        if (!isset($parameters['header'])) {
-            throw new DataSourceException('Header array is not defined for csv data storage.');
-        }
-
-        $this->filePath = $parameters['file'];
-        $this->header = $parameters['header'];
-    }
-
     /**
-     * Adds new record
-     *
-     * @param array $record
-     * @return $this
+     * @inheritdoc
      */
     public function addRecord(array $record)
     {
@@ -77,16 +50,8 @@ class CsvDataStorage implements DataStorageInterface
     }
 
     /**
-     * @param array $record
-     * @throws WrongRecordDataException
+     * @inheritdoc
      */
-    private function validateRecord(array $record)
-    {
-        if (count($record) != count($this->header)) {
-            throw new WrongRecordDataException('Record must have as many elements as the header: '.count($this->header));
-        }
-    }
-
     public function updateRecord($id, array $record)
     {
         $this->validateRecord($record);
@@ -95,6 +60,53 @@ class CsvDataStorage implements DataStorageInterface
         $records[$id] = $record;
 
         $this->saveRecordsToFile($records);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteRecord($id)
+    {
+        $records = $this->fetchRecordsFromFile($this->filePath);
+
+        if (!isset($records[$id])) {
+            throw new RecordNotFoundException(sprintf('Record %d not found in the data storage', $id));
+        }
+
+        unset($records[$id]);
+
+        $this->saveRecordsToFile($records);
+    }
+
+    /**
+     * Reads csv file to array
+     *
+     * @param string $filePath
+     * @return array
+     */
+    private function fetchRecordsFromFile($filePath)
+    {
+        $records = [];
+
+        $file = fopen($filePath, 'r');
+        while (($line = fgetcsv($file)) !== false) {
+            $records[] = array_combine($this->header, $line);
+        }
+
+        fclose($file);
+
+        return $records;
+    }
+
+    /**
+     * @param array $record
+     * @throws WrongRecordDataException
+     */
+    private function validateRecord(array $record)
+    {
+        if (count($record) != count($this->header)) {
+            throw new WrongRecordDataException('Record must have as many elements as the header: '.count($this->header));
+        }
     }
 
     /**
@@ -111,16 +123,19 @@ class CsvDataStorage implements DataStorageInterface
         fclose($file);
     }
 
-    public function deleteRecord($id)
+    /**
+     * @inheritdoc
+     */
+    public function setDataSource(array $parameters)
     {
-        $records = $this->fetchRecordsFromFile($this->filePath);
-
-        if (!isset($records[$id])) {
-            throw new RecordNotFoundException(sprintf('Record %d not found in the data storage', $id));
+        if (!isset($parameters['file'])) {
+            throw new DataSourceException('File path is not defined for csv data storage.');
+        }
+        if (!isset($parameters['header'])) {
+            throw new DataSourceException('Header array is not defined for csv data storage.');
         }
 
-        unset($records[$id]);
-
-        $this->saveRecordsToFile($records);
+        $this->filePath = $parameters['file'];
+        $this->header = $parameters['header'];
     }
 }
