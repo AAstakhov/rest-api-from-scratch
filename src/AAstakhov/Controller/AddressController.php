@@ -18,6 +18,8 @@ class AddressController extends BaseController
     /**
      * @param HttpRequestInterface $request
      * @return HttpResponseInterface
+     *
+     * @throws RecordNotFoundException
      */
     public function getAddressAction(HttpRequestInterface $request)
     {
@@ -42,24 +44,10 @@ class AddressController extends BaseController
     }
 
     /**
-     * @param Exception $exception
-     */
-    private function processException(Exception $exception)
-    {
-        $statusCode = 500;
-        if ($exception instanceof RecordNotFoundException) {
-            $statusCode = 404;
-        } elseif ($exception instanceof WrongRecordDataException) {
-            $statusCode = 400;
-        }
-        $this->getResponse()
-            ->setStatusCode($statusCode)
-            ->setBody($exception->getMessage());
-    }
-
-    /**
      * @param HttpRequestInterface $request
      * @return HttpResponseInterface
+     *
+     * @throws WrongRecordDataException
      */
     public function createAddressAction(HttpRequestInterface $request)
     {
@@ -77,6 +65,9 @@ class AddressController extends BaseController
     /**
      * @param HttpRequestInterface $request
      * @return HttpResponseInterface
+     *
+     * @throws RecordNotFoundException
+     * @throws WrongRecordDataException
      */
     public function updateAddressAction(HttpRequestInterface $request)
     {
@@ -96,6 +87,8 @@ class AddressController extends BaseController
     /**
      * @param HttpRequestInterface $request
      * @return HttpResponseInterface
+     *
+     * @throws RecordNotFoundException
      */
     public function deleteAddressAction(HttpRequestInterface $request)
     {
@@ -110,5 +103,21 @@ class AddressController extends BaseController
         }
 
         return $this->getResponse();
+    }
+
+    /**
+     * @param Exception $exception
+     */
+    private function processException(Exception $exception)
+    {
+        $statusCode = 500;
+        if ($exception instanceof RecordNotFoundException) {
+            $statusCode = 404;
+        } elseif ($exception instanceof WrongRecordDataException) {
+            $statusCode = 400;
+        }
+        $this->getResponse()
+            ->setStatusCode($statusCode)
+            ->setBody($exception->getMessage());
     }
 }
