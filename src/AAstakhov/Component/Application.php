@@ -2,16 +2,21 @@
 
 namespace AAstakhov\Component;
 
+use AAstakhov\Component\HttpRequest;
 use AAstakhov\Controller\AddressController;
 use AAstakhov\DataStorage\CsvDataStorage;
 use AAstakhov\Interfaces\ApplicationInterface;
 use AAstakhov\Interfaces\ContainerInterface;
+use AAstakhov\Interfaces\HttpRequestInterface;
 use AAstakhov\View\JsonView;
 
 class Application implements ApplicationInterface
 {
     protected $container;
 
+    /**
+     * @inheritdoc
+     */
     public function getContainer()
     {
         if ($this->container) {
@@ -21,6 +26,20 @@ class Application implements ApplicationInterface
         $this->container = $this->buildContainer();;
 
         return $this->container;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createRequestFromGlobals()
+    {
+        $postVariables = $_POST;
+        if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+            parse_str(file_get_contents('php://input'), $postVariables);
+        }
+
+        return new HttpRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD'], $_GET,
+            $postVariables);
     }
 
     /**
