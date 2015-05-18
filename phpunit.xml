@@ -1,0 +1,11 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="All">
+            <directory>src/AAstakhov/Tests</directory>
+        </testsuite>
+        <testsuite name="AllWithoutWeb">
+            <directory>src/AAstakhov/Tests</directory>
+            <exclude>src/AAstakhov/Tests/Web</exclude>
+        </testsuite>
+    </testsuites>
+</phpunit>
