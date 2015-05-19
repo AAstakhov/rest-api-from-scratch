@@ -1,6 +1,10 @@
 <?php
 
+namespace AAstakhov\Tests\Web;
+
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use PHPUnit_Framework_TestCase;
 
 class ExampleTest extends PHPUnit_Framework_TestCase
 {
@@ -13,7 +17,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->restoreFixture();
-        $this->client = new GuzzleHttp\Client();
+        $this->client = new Client();
     }
 
     /**
