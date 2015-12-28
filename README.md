@@ -1,5 +1,5 @@
-# TryCatch
-[![Build Status](https://travis-ci.org/AAstakhov/try-catch-test-task.svg?branch=master)](https://travis-ci.org/AAstakhov/try-catch-test-task)
+# REST API from scratch (TryCatch)
+[![Build Status](https://travis-ci.org/AAstakhov/rest-api-from-scratch.svg?branch=master)](https://travis-ci.org/AAstakhov/try-catch-test-task)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AAstakhov/try-catch-test-task/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AAstakhov/try-catch-test-task/?branch=master)
 
 
